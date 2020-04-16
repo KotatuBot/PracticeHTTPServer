@@ -58,7 +58,7 @@ func HeadParse(headers *header.HttpHeader, recv string) {
 
 }
 
-func UrlParse(recv_message string) {
+func UrlParse(recv_message string) header.HttpHeader {
 
 	var recv_array []string
 
@@ -85,5 +85,6 @@ func UrlParse(recv_message string) {
 
 	fmt.Println("-----------")
 	fmt.Println(headers)
+	return headers
 
 }

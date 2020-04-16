@@ -1,6 +1,7 @@
 package main
 
 import (
+	"./header"
 	"./parse"
 	"./response"
 	"io"
@@ -19,6 +20,8 @@ func main() {
 
 	for {
 
+		heads := header.HttpHeader{}
+
 		conn, err := ln.Accept()
 		if err != nil {
 
@@ -29,7 +32,7 @@ func main() {
 		buf := make([]byte, 1024)
 		n, err := conn.Read(buf)
 		recv_data := parse.RecvData(buf, n)
-		parse.UrlParse(recv_data)
+		heads = parse.UrlParse(recv_data)
 
 		if err != nil {
 			if err == io.EOF {
@@ -38,7 +41,7 @@ func main() {
 			log.Println(err)
 		}
 
-		message := response.ResponseMessage()
+		message := response.ResponseMessage(heads.Url)
 		conn.Write(message)
 		conn.Close()
 
