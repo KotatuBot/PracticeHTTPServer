@@ -77,7 +77,8 @@ func SetContentType(filename string) (string, string) {
 
 	case "html":
 		content_type = "text/html;"
-
+	case "ico":
+		content_type = "image/x-icon;"
 	default:
 		content_type = "text/html;"
 
@@ -110,12 +111,12 @@ func CreateHeader(requesthead header.HttpHeader, status string, filename string)
 	headers := header.ResponseHeader{}
 	headers.Status_Code = "HTTP1.1" + " " + status + " " + status
 	headers.Access_Control_Allow_Origin = "*"
-	headers.Connection = "close"
+	headers.Connection = "keep-alive"
 	//headers.Content_Encoding = SetContentEncoding(requesthead.Accept_Encodeing)
 	headers.Content_Type.Media_Type, headers.Content_Type.Charset = SetContentType(filename)
 	headers.Date = SetDatetime()
 
-	Header = fmt.Sprintf("%s\r\nAccess-Control-Allow-Origin: %s\r\nContent-Type: %scharset=%s\r\nConnection: %s\r\nDate: %s\r\n", headers.Status_Code, headers.Access_Control_Allow_Origin, headers.Connection, headers.Content_Type.Media_Type, headers.Content_Type.Charset, headers.Date)
+	Header = fmt.Sprintf("%s\r\nAccess-Control-Allow-Origin: %s\r\nContent-Type: %scharset=%s\r\nConnection: %s\r\nDate: %s\r\n", headers.Status_Code, headers.Access_Control_Allow_Origin, headers.Content_Type.Media_Type, headers.Content_Type.Charset, headers.Connection, headers.Date)
 	Header += "\r\n\r\n"
 	return Header
 }
@@ -131,18 +132,13 @@ func ResponseMessage(requesthead header.HttpHeader) []byte {
 
 	filename, status_code = router.RouterPath(file_path)
 	Header = CreateHeader(requesthead, status_code, filename)
-	//Header = "HTTP1.1" + " " + status_code + " " + status_code + "\r\n"
-	/*
-		Header = ""
-		Header += "HTTP1.1"
-		Header += " " + status_code
-		Header += " " + status_code + "\r\n"
-	*/
 	Header += " \r\n\r\n"
 
 	Body = FileRead(filename)
 
 	Message = Header + Body
+	fmt.Println("Response")
+	fmt.Println(Message)
 
 	response = []byte(Message)
 
