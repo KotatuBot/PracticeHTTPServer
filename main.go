@@ -1,16 +1,18 @@
 package main
 
 import (
-	"./header"
-	"./parse"
-	"./response"
 	"io"
 	"log"
 	"net"
 	"os"
+
+	"./header"
+	"./parse"
+	"./response"
 )
 
-func main() {
+func StartServer() {
+
 	ln, err := net.Listen("tcp", "localhost:8080")
 	defer ln.Close()
 	if err != nil {
@@ -45,6 +47,14 @@ func main() {
 		conn.Write(message)
 		conn.Close()
 
+	}
+
+}
+
+func main() {
+	// ForLooping
+	for {
+		StartServer()
 	}
 
 }

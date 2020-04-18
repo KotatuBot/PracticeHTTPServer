@@ -1,9 +1,10 @@
 package parse
 
 import (
-	"../header"
 	"fmt"
 	"strings"
+
+	"../header"
 )
 
 // Recv Message -> From Byte to String
