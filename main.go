@@ -13,7 +13,7 @@ import (
 
 func StartServer() {
 
-	ln, err := net.Listen("tcp", "localhost:8080")
+	ln, err := net.Listen("tcp", "0.0.0.0:8081")
 	defer ln.Close()
 	if err != nil {
 		log.Println(err)
@@ -43,7 +43,7 @@ func StartServer() {
 			log.Println(err)
 		}
 
-		message := response.ResponseMessage(heads.Url)
+		message := response.ResponseMessage(heads)
 		conn.Write(message)
 		conn.Close()
 
