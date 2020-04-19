@@ -39,8 +39,5 @@ type ResponseHeader struct {
 	Set_Cookie                  string
 	Transfer_Encoding           string
 	Cache_Control               string
-	X_Backend_Server            string
-	X_Cache_Info                string
-	X_kuma_Revision             string
-	X_frame_option              string
+	X_Frame_Options             string
 }

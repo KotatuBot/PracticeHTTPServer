@@ -43,8 +43,9 @@ func CreateHeader(requesthead header.HttpHeader, status string, filename string,
 	headers.Etag = SetEtag(Body)
 	headers.Keep_Alive.Timeout, headers.Keep_Alive.Max = SetKeepAlive()
 	headers.Server = "Scrach"
+	headers.X_Frame_Options = SetXFrameOptions("same")
 
-	Header = fmt.Sprintf("%s\r\nAccess-Control-Allow-Origin: %s\r\nConnection: %s\r\nContent-Type: %scharset=%s\r\nConnection: %s\r\nDate: %s\r\nEtag: %s\r\nKeep-Alive: %s,%s\r\nServer: %s\r\n", headers.Status_Code, headers.Access_Control_Allow_Origin, headers.Connection, headers.Content_Type.Media_Type, headers.Content_Type.Charset, headers.Connection, headers.Date, headers.Etag, headers.Keep_Alive.Timeout, headers.Keep_Alive.Max, headers.Server)
+	Header = fmt.Sprintf("%s\r\nAccess-Control-Allow-Origin: %s\r\nConnection: %s\r\nContent-Type: %scharset=%s\r\nConnection: %s\r\nDate: %s\r\nEtag: %s\r\nKeep-Alive: %s,%s\r\nServer: %s\r\nX-Frame-Options: %s\r\n", headers.Status_Code, headers.Access_Control_Allow_Origin, headers.Connection, headers.Content_Type.Media_Type, headers.Content_Type.Charset, headers.Connection, headers.Date, headers.Etag, headers.Keep_Alive.Timeout, headers.Keep_Alive.Max, headers.Server, headers.X_Frame_Options)
 	Header += "\r\n\r\n"
 	return Header
 }
