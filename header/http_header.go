@@ -20,6 +20,11 @@ type ContentTypes struct {
 	Charset    string
 }
 
+type KeepAlive struct {
+	Timeout string
+	Max     string
+}
+
 type ResponseHeader struct {
 	Status_Code                 string
 	Access_Control_Allow_Origin string
@@ -28,12 +33,12 @@ type ResponseHeader struct {
 	Content_Type                ContentTypes
 	Date                        string
 	Etag                        string
-	Keep_Alive                  string
+	Keep_Alive                  KeepAlive
 	Last_Modified               string
 	Server                      string
 	Set_Cookie                  string
 	Transfer_Encoding           string
-	Vary                        string
+	Cache_Control               string
 	X_Backend_Server            string
 	X_Cache_Info                string
 	X_kuma_Revision             string

@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"strings"
-	"time"
 
 	"../header"
 	"../router"
@@ -31,81 +29,8 @@ func FileRead(filename string) string {
 	return filecontent
 
 }
-func SetStatusCode(statuscode string) string {
-	var statusmessage string
-	/*
-		var status_condition string
 
-		switch statuscode {
-
-		case "200":
-			status_condition = "OK"
-		case "404":
-			status_condition = "Not Found"
-		default:
-			status_condition = "NG"
-		}
-	*/
-
-	statusmessage = "HTTP1.1 " + statuscode + " " + statuscode
-
-	return statusmessage
-}
-
-func SetContentEncoding(requestencoding string) string {
-
-	var content_encoding string
-
-	available := strings.Split(requestencoding, ",")
-	content_encoding = available[0]
-
-	return content_encoding
-
-}
-
-func SetContentType(filename string) (string, string) {
-	var content_type string
-	var charset string
-	var length int
-
-	file_types := strings.Split(filename, ".")
-	length = len(file_types) - 1
-
-	content_type = file_types[length]
-
-	switch content_type {
-
-	case "html":
-		content_type = "text/html;"
-	case "ico":
-		content_type = "image/x-icon;"
-	default:
-		content_type = "text/html;"
-
-	}
-	charset = "UTF-8"
-
-	return content_type, charset
-
-}
-
-func SetDatetime() string {
-	now_times := time.Now()
-	weekday := now_times.Weekday()
-	day := now_times.Day()
-	month := now_times.Month()
-	Year := now_times.Year()
-	hour := now_times.Hour()
-	minute := now_times.Minute()
-	second := now_times.Second()
-	TimCode := "JST"
-
-	dates := fmt.Sprintf("%s, %d %d %d %d:%d:%d %s", weekday, day, month, Year, hour, minute, second, TimCode)
-
-	return dates
-}
-
-func CreateHeader(requesthead header.HttpHeader, status string, filename string) string {
+func CreateHeader(requesthead header.HttpHeader, status string, filename string, Body string) string {
 	var Header string
 
 	headers := header.ResponseHeader{}
@@ -115,8 +40,11 @@ func CreateHeader(requesthead header.HttpHeader, status string, filename string)
 	//headers.Content_Encoding = SetContentEncoding(requesthead.Accept_Encodeing)
 	headers.Content_Type.Media_Type, headers.Content_Type.Charset = SetContentType(filename)
 	headers.Date = SetDatetime()
+	headers.Etag = SetEtag(Body)
+	headers.Keep_Alive.Timeout, headers.Keep_Alive.Max = SetKeepAlive()
+	headers.Server = "Scrach"
 
-	Header = fmt.Sprintf("%s\r\nAccess-Control-Allow-Origin: %s\r\nContent-Type: %scharset=%s\r\nConnection: %s\r\nDate: %s\r\n", headers.Status_Code, headers.Access_Control_Allow_Origin, headers.Content_Type.Media_Type, headers.Content_Type.Charset, headers.Connection, headers.Date)
+	Header = fmt.Sprintf("%s\r\nAccess-Control-Allow-Origin: %s\r\nConnection: %s\r\nContent-Type: %scharset=%s\r\nConnection: %s\r\nDate: %s\r\nEtag: %s\r\nKeep-Alive: %s,%s\r\nServer: %s\r\n", headers.Status_Code, headers.Access_Control_Allow_Origin, headers.Connection, headers.Content_Type.Media_Type, headers.Content_Type.Charset, headers.Connection, headers.Date, headers.Etag, headers.Keep_Alive.Timeout, headers.Keep_Alive.Max, headers.Server)
 	Header += "\r\n\r\n"
 	return Header
 }
@@ -129,18 +57,21 @@ func ResponseMessage(requesthead header.HttpHeader) []byte {
 	var status_code string
 
 	file_path := requesthead.Url
-
+	// Request Parse
 	filename, status_code = router.RouterPath(file_path)
-	Header = CreateHeader(requesthead, status_code, filename)
-	Header += " \r\n\r\n"
 
+	//Body
 	Body = FileRead(filename)
+	// Head
+	Header = CreateHeader(requesthead, status_code, filename, Body)
+	Header += " \r\n\r\n"
 
 	Message = Header + Body
 	fmt.Println("Response")
 	fmt.Println(Message)
-
-	response = []byte(Message)
+	response = []byte(Header)
+	body_bytes := []byte(Body)
+	response = append(response, body_bytes...)
 
 	return response
 }
