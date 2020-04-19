@@ -43,8 +43,11 @@ func CreateHeader(requesthead header.HttpHeader, status string, filename string,
 	headers.Etag = SetEtag(Body)
 	headers.Keep_Alive.Timeout, headers.Keep_Alive.Max = SetKeepAlive()
 	headers.Server = "Scrach"
+	headers.X_Frame_Options = SetXFrameOptions("same")
+	Cookie_Data := SetCookie()
+	headers.Set_Cookie = Cookie_Data
 
-	Header = fmt.Sprintf("%s\r\nAccess-Control-Allow-Origin: %s\r\nConnection: %s\r\nContent-Type: %scharset=%s\r\nConnection: %s\r\nDate: %s\r\nEtag: %s\r\nKeep-Alive: %s,%s\r\nServer: %s\r\n", headers.Status_Code, headers.Access_Control_Allow_Origin, headers.Connection, headers.Content_Type.Media_Type, headers.Content_Type.Charset, headers.Connection, headers.Date, headers.Etag, headers.Keep_Alive.Timeout, headers.Keep_Alive.Max, headers.Server)
+	Header = fmt.Sprintf("%s\r\nAccess-Control-Allow-Origin: %s\r\nConnection: %s\r\nContent-Type: %scharset=%s\r\nConnection: %s\r\nDate: %s\r\nEtag: %s\r\nKeep-Alive: %s,%s\r\nServer: %s\r\nX-Frame-Options: %s\r\nSet-Cookie: %s=%s;Expires=%s;%s;SameSite=%s\r\n", headers.Status_Code, headers.Access_Control_Allow_Origin, headers.Connection, headers.Content_Type.Media_Type, headers.Content_Type.Charset, headers.Connection, headers.Date, headers.Etag, headers.Keep_Alive.Timeout, headers.Keep_Alive.Max, headers.Server, headers.X_Frame_Options, headers.Set_Cookie.Name, headers.Set_Cookie.Value, headers.Set_Cookie.Expires, headers.Set_Cookie.HttpOnly, headers.Set_Cookie.SameSiteCookie)
 	Header += "\r\n\r\n"
 	return Header
 }

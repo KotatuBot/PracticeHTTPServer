@@ -43,7 +43,7 @@ func SetContentType(filename string) (string, string) {
 	case "ico":
 		content_type = "image/x-icon;"
 	default:
-		content_type = "text/html;"
+		content_type = "text/text;"
 
 	}
 	charset = "UTF-8"
@@ -88,4 +88,15 @@ func SetKeepAlive() (string, string) {
 func SetCacheControl() string {
 	return "no-store"
 
+}
+
+func SetXFrameOptions(value string) string {
+
+	var xframeoptions string
+	if value == "same" {
+		xframeoptions = "SAMEORIGIN"
+	} else {
+		xframeoptions = "DENY"
+	}
+	return xframeoptions
 }
