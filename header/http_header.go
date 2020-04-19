@@ -25,6 +25,17 @@ type KeepAlive struct {
 	Max     string
 }
 
+type Cookie struct {
+	Name           string
+	Value          string
+	Expires        string
+	Domain         string
+	Path           string
+	HttpOnly       string
+	Secure         string
+	SameSiteCookie string
+}
+
 type ResponseHeader struct {
 	Status_Code                 string
 	Access_Control_Allow_Origin string
@@ -36,7 +47,7 @@ type ResponseHeader struct {
 	Keep_Alive                  KeepAlive
 	Last_Modified               string
 	Server                      string
-	Set_Cookie                  string
+	Set_Cookie                  Cookie
 	Transfer_Encoding           string
 	Cache_Control               string
 	X_Frame_Options             string
