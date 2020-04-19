@@ -1,6 +1,7 @@
 package router
 
 import (
+	"fmt"
 	"strings"
 )
 
@@ -27,14 +28,17 @@ func RouterPath(recv_path string) (string, string) {
 	switch routename {
 
 	case "/":
-		filename = "test.html"
-	case "test.html":
-		filename = "test.html"
+		filename = "index.html"
+	case "index.html":
+		filename = "index.html"
+	case "favicon.ico":
+		filename = "favicon.ico"
 	default:
 		filename = "notfound.html"
 		status_code = "404"
 
 	}
+	fmt.Println(filename)
 
 	return filename, status_code
 

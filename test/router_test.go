@@ -13,18 +13,18 @@ func TestRouterPath(t *testing.T) {
 
 		result, status := router.RouterPath("/")
 
-		if result != "test.html" || status != "200" {
+		if result != "index.html" || status != "200" {
 
 			t.Fatal("/ Error")
 		}
 
 	})
 
-	t.Run("test.html", func(t *testing.T) {
-		result2, status2 := router.RouterPath("/test.html")
-		if result2 != "test.html" || status2 != "200" {
+	t.Run("index.html", func(t *testing.T) {
+		result2, status2 := router.RouterPath("/index.html")
+		if result2 != "index.html" || status2 != "200" {
 
-			t.Fatal("test.html Error")
+			t.Fatal("index.html Error")
 		}
 
 	})
